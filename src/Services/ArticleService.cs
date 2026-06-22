@@ -6,9 +6,10 @@ namespace Publishing.Services;
 public class ArticleService : IArticleService
 {
     private readonly IArticleRepository _repository;
-    private readonly List<string> _auditTrail = new();
-    private readonly List<string> _subscriberNotifications = new();
-    private readonly List<string> _searchIndex = new();
+    private readonly List<string> _auditTrail = [];
+    private readonly List<string> _subscriberNotifications = [];
+    private readonly List<string> _searchIndex = [];
+    private readonly List<Article> _syndicationFeed = [];
 
     public ArticleService(IArticleRepository repository)
     {
@@ -56,6 +57,8 @@ public class ArticleService : IArticleService
         article.Status = "Published";
         article.PublishedAt = DateTime.UtcNow;
         _repository.Update(article);
+
+        _syndicationFeed.Add(article);
 
         _auditTrail.Add($"{DateTime.UtcNow:o} | article {article.Id} published by {article.AuthorName}");
 

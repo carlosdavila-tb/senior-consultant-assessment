@@ -36,7 +36,7 @@ export class FreshnessSummaryComponent {
   @Input({ required: true }) articles: Article[] = [];
 
   get counts(): FreshnessCount[] {
-    const buckets = { New: 0, Recent: 0, Stale: 0 };
+    const buckets = { New: 0, Recent: 0, Stale: 0, Archived: 0 };
 
     for (const article of this.articles) {
       if (!article.publishedAt) {
@@ -49,8 +49,10 @@ export class FreshnessSummaryComponent {
         buckets.New += 1;
       } else if (days < 30) {
         buckets.Recent += 1;
-      } else {
+      } else if (days < 365) {
         buckets.Stale += 1;
+      } else {
+        buckets.Archived += 1;
       }
     }
 
@@ -58,6 +60,7 @@ export class FreshnessSummaryComponent {
       { label: 'New', count: buckets.New },
       { label: 'Recent', count: buckets.Recent },
       { label: 'Stale', count: buckets.Stale },
+      { label: "Archived", count: buckets.Archived}
     ];
   }
 }

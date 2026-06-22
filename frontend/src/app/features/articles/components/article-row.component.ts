@@ -55,10 +55,12 @@ export class ArticleRowComponent {
 
     if (days < 7) {
       return 'New';
-    }
-    if (days < 30) {
+    } else if (days < 30) {
       return 'Recent';
+    } else if (days < 365) {
+      return 'Stale';
     }
-    return 'Stale';
+    
+    return 'Archived';
   }
 }
