@@ -230,7 +230,7 @@ private readonly List<string> _auditTrail = new();
 _auditTrail.Add($"{DateTime.UtcNow:o} | article {article.Id} published by {article.AuthorName}");
 ```
 
-- [ ] A) Once each record is flattened into a string, the individual facts (which article, which author, when) can no longer be filtered or queried without re-parsing the text.
+- [X] A) Once each record is flattened into a string, the individual facts (which article, which author, when) can no longer be filtered or queried without re-parsing the text.
 - [ ] B) A `List<string>` cannot safely hold more than a few hundred entries.
 - [ ] C) String entries always use more memory than any structured alternative.
 - [ ] D) The compiler cannot append interpolated strings to a list.
@@ -250,13 +250,13 @@ if (article.Status == "Published") { /* ... */ }
 
 - [ ] A) Store status as an `int` code (0, 1, 2) to save space.
 - [ ] B) Keep it a string but add a comment listing the valid values.
-- [ ] C) Model status as a defined type (an enum or value object) so invalid values are impossible and the valid set is explicit — accepting that adding a value is a code change.
+- [X] C) Model status as a defined type (an enum or value object) so invalid values are impossible and the valid set is explicit — accepting that adding a value is a code change.
 - [ ] D) Keep it a string for flexibility — a new status needs no type change — accepting that typos and invalid values are possible and must be guarded at runtime.
 
 <details open>
 <summary>💬 Your reasoning</summary>
 
-_Explain why you chose your answer..._
+Having explicit options in a type (could be enums for example), in these cases are perfect to maintain the code cleaner, since this Status inside the article has rules established by business rules.
 
 </details>
 
@@ -276,14 +276,14 @@ if (article.Status == "Published")
 ```
 
 - [ ] A) Let each operation set any status freely and rely on code review to catch invalid transitions.
-- [ ] B) Define the allowed transitions in one place that every operation consults, so the lifecycle is a single source of truth — accepting a new structure to maintain.
+- [X] B) Define the allowed transitions in one place that every operation consults, so the lifecycle is a single source of truth — accepting a new structure to maintain.
 - [ ] C) Keep each operation's transition check local to that operation, so each stays simple and self-contained — accepting that the lifecycle rules are spread out and can drift.
 - [ ] D) Remove the checks and store whatever status the caller sends.
 
 <details open>
 <summary>💬 Your reasoning</summary>
 
-_Explain why you chose your answer..._
+Keeping the code structure clean is better. And having in mind that probably these validations could be used along in multiple endpoints/services, it's better to keep it in one place as a SoT.
 
 </details>
 
@@ -301,7 +301,7 @@ publishing updates the stored article, but the cache still holds the old copy
 - [ ] A) Increase the cache's time-to-live so entries live longer.
 - [ ] B) Remove caching entirely so every read hits the store.
 - [ ] C) Ask readers to hard-refresh their browser after each publish.
-- [ ] D) Invalidate or refresh the affected cache entry as part of the publish flow, so the next read reflects the new version.
+- [X] D) Invalidate or refresh the affected cache entry as part of the publish flow, so the next read reflects the new version.
 
 ---
 
@@ -319,7 +319,7 @@ public class Article
 }
 ```
 
-- [ ] A) Keep an append-only history of versions, so any past published state can be retrieved, audited, or rolled back — accepting more storage and added complexity.
+- [X] A) Keep an append-only history of versions, so any past published state can be retrieved, audited, or rolled back — accepting more storage and added complexity.
 - [ ] B) Continue overwriting the current version in place, keeping the model simple and storage small — accepting that there is no history, rollback, or record of what changed.
 - [ ] C) Store only the two most recent versions and discard the rest unconditionally.
 - [ ] D) Disallow editing an article once it has been published.
@@ -327,7 +327,9 @@ public class Article
 <details open>
 <summary>💬 Your reasoning</summary>
 
-_Explain why you chose your answer..._
+Keeping versions of each article might be the best solution to maintain auditability of each update. Along that, we can integrate rules of deleting older versions to keep it more stable. However, this is more related to a business rule... is it necessary to keep versions of an article? How many times an article is updated? Does it need to be audited multiple times? This is more important that the technical/dev answer.
+
+Why? and not How?
 
 </details>
 
@@ -339,13 +341,13 @@ _Explain why you chose your answer..._
 
 - [ ] A) Keep everything forever and add storage whenever it fills up.
 - [ ] B) Automatically delete the oldest records whenever storage runs low.
-- [ ] C) Establish a platform-wide content lifecycle policy — retention windows, archival tiers, and deletion rules — applied consistently as each content type onboards, so growth is governed by intent rather than by storage pressure.
+- [X] C) Establish a platform-wide content lifecycle policy — retention windows, archival tiers, and deletion rules — applied consistently as each content type onboards, so growth is governed by intent rather than by storage pressure.
 - [ ] D) Let each editorial team decide ad hoc when to clean up its own data.
 
 <details open>
 <summary>💬 Your reasoning</summary>
 
-_Explain why you chose your answer..._
+Answered the previous question without looking at this one. But option C, define rules to be consistent along the app, freeing storage but keeping the necessary versions of the articles. Always having in mind the business logic.
 
 </details>
 
@@ -361,7 +363,7 @@ loop: call find_similar_articles(...) -> refine tags -> call again -> ...
 ```
 
 - [ ] A) The tool will always return prose that cannot be parsed into tags.
-- [ ] B) Without a termination condition the agent may keep calling the tool indefinitely, consuming time and tokens without converging.
+- [X] B) Without a termination condition the agent may keep calling the tool indefinitely, consuming time and tokens without converging.
 - [ ] C) The model's temperature increases automatically on each call.
 - [ ] D) The context window permanently shrinks after each tool call.
 

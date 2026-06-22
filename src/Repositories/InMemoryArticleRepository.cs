@@ -8,7 +8,7 @@ public class InMemoryArticleRepository : IArticleRepository
     {
         new Article { Id = 1, Title = "Onboarding the new design system", AuthorName = "Ana Ruiz", Status = "Published", PublishedAt = DateTime.UtcNow.AddDays(-3) },
         new Article { Id = 2, Title = "Quarterly engineering update", AuthorName = "Marcus Webb", Status = "Published", PublishedAt = DateTime.UtcNow.AddDays(-20) },
-        new Article { Id = 3, Title = "A retrospective on our 2025 roadmap", AuthorName = "Priya Nair", Status = "Published", PublishedAt = DateTime.UtcNow.AddDays(-95) },
+        new Article { Id = 3, Title = "A retrospective on our 2025 roadmap", AuthorName = "Priya Nair", Status = "Published", PublishedAt = DateTime.UtcNow.AddDays(-366) },
         new Article { Id = 4, Title = "Draft: migrating the billing service", AuthorName = "Ana Ruiz", Status = "Draft", PublishedAt = null },
     };
 
